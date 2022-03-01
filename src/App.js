@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch, useSelector } from "react-redux";
+import { Wrapper } from "./AppStyle";
+import MainCard from "./components/main-card/MainCard";
+import { resetQuiz } from "./store/questionsSlice";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const App = () => {
+  const { quizOver, score, total, currentQuestion } = useSelector(
+    (state) => state.questions
   );
-}
+  const dispatch = useDispatch();
+
+  const renderCard = <MainCard data={currentQuestion} />;
+
+  const handleResetQuiz = () => dispatch(resetQuiz());
+
+  return (
+    <Wrapper>
+      {quizOver ? (
+        <div style={{ textAlign: "center" }}>
+          <div style={{ marginBottom: "2rem" }}>
+            Your Score is: {score}/{total}
+          </div>
+          <button
+            style={{ fontSize: "1.5rem", height: "4rem", width: "25rem" }}
+            onClick={handleResetQuiz}
+          >
+            Start New Quiz
+          </button>
+        </div>
+      ) : (
+        renderCard
+      )}
+    </Wrapper>
+  );
+};
 
 export default App;
